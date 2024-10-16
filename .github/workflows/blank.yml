@@ -1,0 +1,55 @@
+name: Your Appimage
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: "0 21 * * 0"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container: artixlinux/artixlinux:latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: build
+      if: always()
+      run: |
+        pacman -Syu --noconfirm && pacman -S --noconfirm base-devel curl desktop-file-utils git wget \
+        python musl base-devel patchelf gtk3 libglvnd qt5-base qt5-wayland qt5-svg fuse3
+
+        chmod +x ./make-appdir.sh ./make-appimage.sh
+        ./make-appdir.sh && ./make-appimage.sh
+
+        mkdir dist
+        mv *AppImage* dist/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4.4.0
+      with:
+        name: AppImage
+        path: 'dist'
+
+  release:
+      needs: [build]
+      permissions: write-all
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/download-artifact@v4.1.8
+          with:
+            name: AppImage
+
+        - name: release
+          uses: marvinpinto/action-automatic-releases@latest
+          with:
+            title: Continuous build
+            automatic_release_tag: continuous
+            prerelease: false
+            draft: false
+            files: |
+              *.AppImage*
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
