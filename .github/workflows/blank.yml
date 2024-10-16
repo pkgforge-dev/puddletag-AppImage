@@ -21,6 +21,10 @@ jobs:
         pacman -Syu --noconfirm && pacman -S --noconfirm base-devel curl desktop-file-utils git wget \
         python musl base-devel patchelf gtk3 libglvnd qt5-base qt5-wayland qt5-svg fuse3
 
+        # Artix repos don't have zsyc
+        wget https://london.mirror.pkgbuild.com/extra/os/x86_64/zsync-0.6.2-5-x86_64.pkg.tar.zst
+        pacman -U ./zsync-0.6.2-5-x86_64.pkg.tar.zst
+
         chmod +x ./make-appdir.sh ./make-appimage.sh
         ./make-appdir.sh && ./make-appimage.sh
 
