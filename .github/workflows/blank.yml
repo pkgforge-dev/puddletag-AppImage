@@ -25,11 +25,9 @@ jobs:
         wget https://london.mirror.pkgbuild.com/extra/os/x86_64/zsync-0.6.2-5-x86_64.pkg.tar.zst
         pacman -U --noconfirm ./zsync-0.6.2-5-x86_64.pkg.tar.zst
 
-        chmod +x ./make-appdir.sh ./make-appimage.sh
-        ./make-appdir.sh && ./make-appimage.sh
-
+        chmod +x ./puddletag-appimage.sh && ./puddletag-appimage.sh
         mkdir dist
-        mv *AppImage* dist/
+        mv *.AppImage* dist/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4.4.0
