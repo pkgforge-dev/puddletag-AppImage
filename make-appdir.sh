@@ -27,6 +27,7 @@ ldd dist/puddletag/puddletag | grep '> /' | sed 's|.*> /|/|g' \
 
 # add qt5ct
 cp "$(find /usr/lib -type f -name 'libqt5ct.so' -print -quit 2>/dev/null)" dist/puddletag/_internal/PyQt5/Qt5/plugins/platformthemes
+cp -r "$(find /usr/lib -type d -regex '.*plugins/styles' -print -quit 2>/dev/null)" dist/puddletag/_internal/PyQt5/Qt5/plugins
 
 shopt -s extglob
 patchelf --debug --set-rpath '$ORIGIN/lib' dist/puddletag/puddletag
