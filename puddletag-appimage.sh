@@ -8,6 +8,8 @@ python -m pip install --no-cache-dir --upgrade --force --ignore-installed pip
 python -m pip install --no-cache-dir --upgrade wheel pyinstaller
 python -m pip install --no-cache-dir --upgrade puddletag
 
+VERSION="$(python -m pip show puddletag 2>/dev/null | awk '/Version:/ {print $2; exit}')"
+
 cp /usr/lib/ld-musl-x86_64.so.1 libc.musl-x86_64.so.1
 
 pyinstaller --name puddletag --target-arch x86_64 --strip --noupx \
@@ -56,7 +58,6 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
 UPINFO="gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|puddletag-AppImage|latest|*$ARCH.AppImage.zsync"
-VERSION="$(./puddletag.AppDir/AppRun --version 2>/dev/null | awk 'FNR==1 {print $NF}')"
 [ -z "$VERSION" ] && VERSION=unknown
 export VERSION
 
