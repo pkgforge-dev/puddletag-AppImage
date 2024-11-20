@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 # archlinux deps: python musl base-devel patchelf gtk3 libglvnd qt5-base qt5-wayland qt5-svg
 
-# make appdir
-mkdir -p ./puddletag/build-env && cd puddletag || exit 1
-python -m venv build-env && . build-env/bin/activate || exit 1
+set -eu
+
+PACKAGE="puddletag"
+export APPIMAGE_EXTRACT_AND_RUN=1
+export ARCH="$(uname -m)"
+UPINFO="gh-releases-zsync|$(echo $GITHUB_REPOSITORY | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
+URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
+	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
+
+# MAKE APPDIR AND INSTALL PUDDLETAG
+mkdir -p ./"$PACKAGE"/build-env
+cd "$PACKAGE"
+python -m venv build-env
+. build-env/bin/activate
 python -m pip install --no-cache-dir --upgrade --force --ignore-installed pip
 python -m pip install --no-cache-dir --upgrade wheel pyinstaller
 python -m pip install --no-cache-dir --upgrade puddletag
 
 VERSION="$(python -m pip show puddletag 2>/dev/null | awk '/Version:/ {print $2; exit}')"
+[ -n "$VERSION" ] || VERSION=unknown
 
 cp /usr/lib/ld-musl-x86_64.so.1 libc.musl-x86_64.so.1
 
@@ -37,34 +49,40 @@ shopt -s extglob
 patchelf --debug --set-rpath '$ORIGIN/lib' dist/puddletag/puddletag
 patchelf --debug --set-rpath '$ORIGIN' dist/puddletag/lib/!(ld-linux-x86-64.so.2)
 
-mv ./dist/puddletag ./puddletag.AppDir
+mv ./dist/puddletag ./AppDir
 
 echo '#!/usr/bin/env sh
 HERE="$(dirname "$(readlink -f "$0")")"
-exec "$HERE/lib/ld-linux-x86-64.so.2" "$HERE/puddletag" "$@"' > ./puddletag.AppDir/AppRun
-chmod +x ./puddletag.AppDir/AppRun
+exec "$HERE/lib/ld-linux-x86-64.so.2" "$HERE/puddletag" "$@"' > ./AppDir/AppRun
+chmod +x ./AppDir/AppRun
 
-cp ./build-env/share/applications/puddletag.desktop ./puddletag.AppDir
-cp ./build-env/share/pixmaps/puddletag.png ./puddletag.AppDir
-ln -s ./puddletag.png ./puddletag.AppDir/.DirIcon
+cp -v ./build-env/share/applications/puddletag.desktop ./AppDir
+cp -v ./build-env/share/pixmaps/puddletag.png ./AppDir
+ln -s ./puddletag.png ./AppDir/.DirIcon
 
-# bug?
-# if not done for some reason appimagetool will fail to find the AppDir
-# and yes I checked $PWD just in case and that is not the issue
-mv ./puddletag.AppDir ../ && cd ../ || exit 1
+# MAKE APPIMAGE WITH URUNTIME
+wget -q "$URUNTIME" -O ./uruntime
+chmod +x ./uruntime
 
-# make appimage
-export APPIMAGE_EXTRACT_AND_RUN=1
-export ARCH="$(uname -m)"
-APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
-UPINFO="gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|puddletag-AppImage|latest|*$ARCH.AppImage.zsync"
-[ -z "$VERSION" ] && VERSION=unknown
-export VERSION
+#Add udpate info to runtime
+echo "Adding update information \"$UPINFO\" to runtime..."
+printf "$UPINFO" > data.upd_info
+llvm-objcopy --update-section=.upd_info=data.upd_info \
+	--set-section-flags=.upd_info=noload,readonly ./uruntime
+printf 'AI\x02' | dd of=./uruntime bs=1 count=3 seek=8 conv=notrunc
 
-wget "$APPIMAGETOOL" -O ./appimagetool && chmod +x ./appimagetool
+echo "Generating AppImage..."
+./uruntime --appimage-mkdwarfs -f \
+	--set-owner 0 --set-group 0 \
+	--no-history --no-create-timestamp \
+	--compression zstd:level=22 -S23 -B16 \
+	--header uruntime \
+	-i ./AppDir -o "$PACKAGE"-"$VERSION"-anylinux-"$ARCH".AppImage
 
-./appimagetool --comp zstd \
-	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
-	-n -u "$UPINFO" ./puddletag.AppDir puddletag-"$VERSION"-"$ARCH".AppImage
+echo "Generating zsync file..."
+zsyncmake *.AppImage -u *.AppImage
 
+mv ./*.AppImage* ../
+cd ..
+rm -rf ./"$PACKAGE"
 echo "All Done!"
