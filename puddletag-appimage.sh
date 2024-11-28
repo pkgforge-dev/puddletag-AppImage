@@ -53,7 +53,9 @@ mv ./dist/puddletag ./AppDir
 
 echo '#!/usr/bin/env sh
 HERE="$(dirname "$(readlink -f "$0")")"
-exec "$HERE/lib/ld-linux-x86-64.so.2" "$HERE/puddletag" "$@"' > ./AppDir/AppRun
+[ -f "$APPIMAGE".stylesheet ] && APPIMAGE_QT_THEME="$APPIMAGE.stylesheet"
+[ -f "$APPIMAGE_QT_THEME" ] && set -- "$@" "-stylesheet" "$APPIMAGE_QT_THEME"
+exec "$HERE/lib/ld-linux-x86-64.so.2" "$HERE/puddletag" "$@"
 chmod +x ./AppDir/AppRun
 
 cp -v ./build-env/share/applications/puddletag.desktop ./AppDir
