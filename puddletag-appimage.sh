@@ -20,7 +20,11 @@ python -m pip install --no-cache-dir --upgrade wheel pyinstaller
 python -m pip install --no-cache-dir --upgrade puddletag
 
 VERSION="$(python -m pip show puddletag 2>/dev/null | awk '/Version:/ {print $2; exit}')"
-[ -n "$VERSION" ] || VERSION=unknown
+if [ -z "$VERSION" ]; then
+	echo "ERROR: Could not get version of puddletag"
+	exit 1
+fi
+echo "$VERSION" > ~/version
 
 cp /usr/lib/ld-musl-x86_64.so.1 libc.musl-x86_64.so.1
 
