@@ -25,6 +25,10 @@ jobs:
         printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
         pacman -Syu --noconfirm zsync python musl gtk3 qt5-base qt5-wayland qt5-svg fuse3 qt5ct
 
+        wget --retry-connrefused --tries=30 \
+          "https://archive.archlinux.org/packages/p/python/python-3.12.7-1-x86_64.pkg.tar.zst"
+        pacman -U --noconfirm python-3.12.7-1-x86_64.pkg.tar.zst
+
         chmod +x ./puddletag-appimage.sh && ./puddletag-appimage.sh
         mkdir dist
         mv *.AppImage* dist/
