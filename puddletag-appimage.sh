@@ -7,8 +7,7 @@ PACKAGE="puddletag"
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 UPINFO="gh-releases-zsync|$(echo $GITHUB_REPOSITORY | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
-URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
-	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
+APPIMAGETOOL="https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/continuous/appimagetool-$ARCH.AppImage"
 
 # MAKE APPDIR AND INSTALL PUDDLETAG
 mkdir -p ./"$PACKAGE"/build-env
@@ -67,26 +66,12 @@ cp -v ./build-env/share/pixmaps/puddletag.png ./AppDir
 ln -s ./puddletag.png ./AppDir/.DirIcon
 
 # MAKE APPIMAGE WITH URUNTIME
-wget -q "$URUNTIME" -O ./uruntime
-chmod +x ./uruntime
+wget -q "$APPIMAGETOOL" -O ./appimagetool
+chmod +x ./appimagetool
 
-#Add udpate info to runtime
-echo "Adding update information \"$UPINFO\" to runtime..."
-printf "$UPINFO" > data.upd_info
-llvm-objcopy --update-section=.upd_info=data.upd_info \
-	--set-section-flags=.upd_info=noload,readonly ./uruntime
-printf 'AI\x02' | dd of=./uruntime bs=1 count=3 seek=8 conv=notrunc
-
-echo "Generating AppImage..."
-./uruntime --appimage-mkdwarfs -f \
-	--set-owner 0 --set-group 0 \
-	--no-history --no-create-timestamp \
-	--compression zstd:level=22 -S23 -B16 \
-	--header uruntime \
-	-i ./AppDir -o "$PACKAGE"-"$VERSION"-anylinux-"$ARCH".AppImage
-
-echo "Generating zsync file..."
-zsyncmake *.AppImage -u *.AppImage
+./appimagetool --comp zstd \
+	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
+	-n -u "$UPINFO" "$PWD"/AppDir "$PWD"/"$PACKAGE"-"$VERSION"-anylinux-"$ARCH".AppImage
 
 mv ./*.AppImage* ../
 cd ..
