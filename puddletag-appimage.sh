@@ -77,7 +77,7 @@ echo "Generating AppImage..."
 ./uruntime --appimage-mkdwarfs -f \
 	--set-owner 0 --set-group 0 \
 	--no-history --no-create-timestamp \
-	--compression zstd:level=22 -S26 -B32 \
+	--compression zstd:level=22 -S26 -B8 \
 	--header uruntime \
 	-i ./AppDir -o ./"$PACKAGE"-"$VERSION"-anylinux-"$ARCH".AppImage
 
@@ -86,7 +86,7 @@ chmod +x ./pelf
 echo "Generating [dwfs]AppBundle...(Go runtime)"
 ./pelf --add-appdir ./AppDir \
 	--appbundle-id="$PACKAGE-$VERSION" \
-	--compression "-C zstd:level=22 -S25 -B32" \
+	--compression "-C zstd:level=22 -S26 -B8" \
 	--output-to "$PACKAGE"-"$VERSION"-anylinux-"$ARCH".dwfs.AppBundle
 
 echo "Generating zsync file..."
