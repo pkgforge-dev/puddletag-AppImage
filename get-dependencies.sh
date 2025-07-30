@@ -24,7 +24,6 @@ pacman -Syu --noconfirm \
 	fontconfig          \
 	freetype2           \
 	git                 \
-	gtk3                \
 	gvfs                \
 	libxcb              \
 	libxcursor          \
