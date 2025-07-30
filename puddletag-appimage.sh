@@ -55,8 +55,8 @@ mkdir -p ./AppDir && (
 	KEK
 )
 
-VERSION="$(./AppDir/AppRun --version | awk '{print $NF; exit}')"
-echo "$VERSION" > ~/version
+VERSION="$(xvfb-run -a -- ./AppDir/AppRun --version | awk '{print $NF; exit}')"
+[ -n "$VERSION" ] && echo "$VERSION" > ~/version
 
 # MAKE APPIMAGE WITH URUNTIME
 wget --retry-connrefused --tries=30 "$URUNTIME"      -O  ./uruntime
