@@ -55,6 +55,9 @@ mkdir -p ./AppDir && (
 	KEK
 )
 
+VERSION="$(./AppDir/AppRun --version | awk '{print $NF; exit}')"
+echo "$VERSION" > ~/version
+
 # MAKE APPIMAGE WITH URUNTIME
 wget --retry-connrefused --tries=30 "$URUNTIME"      -O  ./uruntime
 wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O  ./uruntime-lite
