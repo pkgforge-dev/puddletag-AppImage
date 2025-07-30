@@ -36,7 +36,7 @@ mkdir -p ./AppDir && (
 	[ -f "$APPIMAGE".stylesheet ] && APPIMAGE_QT_THEME="$APPIMAGE.stylesheet"
 	[ -f "$APPIMAGE_QT_THEME" ] && set -- "$@" "-stylesheet" "$APPIMAGE_QT_THEME"
 	exec "$CURRENTDIR"/bin/puddletag "$@"
-	EOF
+	KEK
 	chmod +x ./AppRun
 
 	cat <<-'KEK' > ./puddletag.desktop
