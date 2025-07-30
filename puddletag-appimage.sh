@@ -90,4 +90,9 @@ echo "Generating [dwfs]AppBundle..."
 
 zsyncmake ./*.AppImage -u ./*.AppImage
 zsyncmake ./*.AppBundle -u ./*.AppBundle
+
+mkdir -p ./dist
+mv -v ./*.AppImage*  ./dist
+mv -v ./*.AppBundle* ./dist
+
 echo "All Done!"
