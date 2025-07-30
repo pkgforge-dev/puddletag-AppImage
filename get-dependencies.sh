@@ -37,6 +37,7 @@ pacman -Syu --noconfirm \
 	pipewire-audio      \
 	pulseaudio          \
 	pulseaudio-alsa     \
+	qt5-base            \
 	wget                \
 	xorg-server-xvfb    \
 	zsync
