@@ -45,5 +45,8 @@ wget --retry-connrefused --tries=30 "$OPUS_URL"   -O  ./opus.pkg.tar.zst
 pacman -U --noconfirm ./*.pkg.tar.zst
 rm -f ./*.pkg.tar.zst
 
+# This app will dlopen mesa, even though it is not needed at all since it is a qt app
+pacman -Rdd --noconfirm mesa
+
 echo "All done!"
 echo "---------------------------------------------------------------"
