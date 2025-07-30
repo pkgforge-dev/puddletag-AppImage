@@ -58,6 +58,12 @@ mkdir -p ./AppDir && (
 	KEK
 )
 
+echo "Debloating package..."
+rm -rfv \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/qml                   \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/geoservices   \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/assetimporters
+
 VERSION="$(xvfb-run -a -- ./AppDir/AppRun --version | awk '{print $NF; exit}')"
 [ -n "$VERSION" ] && echo "$VERSION" > ~/version
 
