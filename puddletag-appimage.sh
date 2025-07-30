@@ -60,9 +60,6 @@ wget --retry-connrefused --tries=30 "$URUNTIME"      -O  ./uruntime
 wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O  ./uruntime-lite
 chmod +x ./uruntime*
 
-# Keep the mount point (speeds up launch time)
-sed -i 's|URUNTIME_MOUNT=[0-9]|URUNTIME_MOUNT=0|' ./uruntime-lite
-
 # Add udpate info to runtime
 echo "Adding update information \"$UPINFO\" to runtime..."
 ./uruntime-lite --appimage-addupdinfo "$UPINFO"
@@ -84,11 +81,11 @@ wget --retry-connrefused --tries=30 \
 chmod +x ./pelf
 echo "Generating [dwfs]AppBundle..."
 ./pelf \
-	--compression "-C zstd:level=22 -S26 -B8"      \
-	--appbundle-id="puddletag-$VERSION"            \
-	--appimage-compat --disable-use-random-workdir \
-	--add-updinfo "$UPINFO"                        \
-	--add-appdir ./AppDir                          \
+	--compression "-C zstd:level=22 -S26 -B8" \
+	--appbundle-id="puddletag-$VERSION"       \
+	--appimage-compat                         \
+	--add-updinfo "$UPINFO"                   \
+	--add-appdir ./AppDir                     \
 	--output-to ./puddletag-"$VERSION"-anylinux-"$ARCH".dwfs.AppBundle
 
 zsyncmake ./*.AppImage -u ./*.AppImage
