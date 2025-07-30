@@ -10,7 +10,7 @@ UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARC
 ICON="https://raw.githubusercontent.com/puddletag/puddletag/8a1d2badc76340f5cca84e938919707cc891c4ce/puddlestuff/data/appicon.svg"
 
 # github actions doesn't set USER
-USER=USER
+export USER=USER
 
 # Prepare AppDir
 mkdir -p ./AppDir && (
