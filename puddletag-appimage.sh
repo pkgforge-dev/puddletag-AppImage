@@ -22,7 +22,7 @@ mkdir -p ./AppDir && (
 		./sharun-aio l         \
 		--strip                \
 		--with-hooks           \
-		--python-ver 3.12      \
+		--python-ver 3.13      \
 		--python-pkg puddletag \
 		--dst-dir ./ sharun -- puddletag
 	rm -f ./sharun-aio
@@ -37,12 +37,12 @@ mkdir -p ./AppDir && (
 	# add qt5ct for custom theming
 	echo "Adding qt5ct..."
 	mkdir -p \
-		./lib/python3.12/site-packages/PyQt5/Qt5/plugins/styles \
-		./lib/python3.12/site-packages/PyQt5/Qt5/plugins/platformthemes
+		./lib/python3.13/site-packages/PyQt5/Qt5/plugins/styles \
+		./lib/python3.13/site-packages/PyQt5/Qt5/plugins/platformthemes
 
 	cp -v /usr/lib/libqt5ct*                              ./lib
-	cp -v /usr/lib/qt/plugins/styles/libqt5ct-style.so    ./lib/python3.12/site-packages/PyQt5/Qt5/plugins/styles
-	cp -v /usr/lib/qt/plugins/platformthemes/libqt5ct.so  ./lib/python3.12/site-packages/PyQt5/Qt5/plugins/platformthemes
+	cp -v /usr/lib/qt/plugins/styles/libqt5ct-style.so    ./lib/python3.13/site-packages/PyQt5/Qt5/plugins/styles
+	cp -v /usr/lib/qt/plugins/platformthemes/libqt5ct.so  ./lib/python3.13/site-packages/PyQt5/Qt5/plugins/platformthemes
 
 	echo "Adding icon and desktop entry..."
 	wget "$ICON" -O ./puddletag.svg
@@ -76,13 +76,13 @@ mkdir -p ./AppDir && (
 
 echo "Debloating package..."
 rm -rfv \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/qml                       \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Qml.so*         \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Quick.so*       \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Designer.so*    \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5XmlPatterns.so* \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/geoservices       \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/assetimporters
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/qml                       \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/lib/libQt5Qml.so*         \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/lib/libQt5Quick.so*       \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/lib/libQt5Designer.so*    \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/lib/libQt5XmlPatterns.so* \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/plugins/geoservices       \
+	./AppDir/lib/python3.13/site-packages/PyQt*/Qt*/plugins/assetimporters
 
 VERSION="$(xvfb-run -a -- ./AppDir/AppRun --version | awk '{print $NF; exit}')"
 [ -n "$VERSION" ] && echo "$VERSION" > ~/version
