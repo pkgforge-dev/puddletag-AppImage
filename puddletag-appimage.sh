@@ -31,7 +31,8 @@ mkdir -p ./AppDir && (
 
 	# sharun is not stripping python due to issues with other packages
 	# however that issue is not present here lol
-	strip --strip-all ./lib/libpython* 
+	strip --strip-all ./lib/libpython*
+	find ./lib/python* -type f -name '*.so*' -exec strip --strip-all {} \;
 
 	# add qt5ct for custom theming
 	echo "Adding qt5ct..."
