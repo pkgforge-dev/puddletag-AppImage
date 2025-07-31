@@ -36,12 +36,12 @@ mkdir -p ./AppDir && (
 	# add qt5ct for custom theming
 	echo "Adding qt5ct..."
 	mkdir -p \
-		./lib/python*/site-packages/PyQt5/Qt5/plugins/styles \
-		./lib/python*/site-packages/PyQt5/Qt5/plugins/platformthemes
+		./lib/python3.12/site-packages/PyQt5/Qt5/plugins/styles \
+		./lib/python3.12/site-packages/PyQt5/Qt5/plugins/platformthemes
 
 	cp -v /usr/lib/libqt5ct*                              ./lib
-	cp -v /usr/lib/qt/plugins/styles/libqt5ct-style.so    ./lib/python*/site-packages/PyQt5/Qt5/plugins/styles
-	cp -v /usr/lib/qt/plugins/platformthemes/libqt5ct.so  ./lib/python*/site-packages/PyQt5/Qt5/plugins/platformthemes
+	cp -v /usr/lib/qt/plugins/styles/libqt5ct-style.so    ./lib/python3.12/site-packages/PyQt5/Qt5/plugins/styles
+	cp -v /usr/lib/qt/plugins/platformthemes/libqt5ct.so  ./lib/python3.12/site-packages/PyQt5/Qt5/plugins/platformthemes
 
 	echo "Adding icon and desktop entry..."
 	wget "$ICON" -O ./puddletag.svg
