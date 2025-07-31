@@ -16,24 +16,24 @@ OPUS_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/
 echo "Installing build dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-	base-devel          \
-	curl                \
-	desktop-file-utils  \
-	fontconfig          \
-	freetype2           \
-	git                 \
-	libxcb              \
-	libxcursor          \
-	libxi               \
-	libxkbcommon        \
-	libxkbcommon-x11    \
-	libxrandr           \
-	libxtst             \
-	pulseaudio          \
-	pulseaudio-alsa     \
-	qt5-base            \
-	wget                \
-	xorg-server-xvfb    \
+	base-devel        \
+	curl              \
+	fontconfig        \
+	freetype2         \
+	git               \
+	libxcb            \
+	libxcursor        \
+	libxi             \
+	libxkbcommon      \
+	libxkbcommon-x11  \
+	libxrandr         \
+	libxtst           \
+	pulseaudio        \
+	pulseaudio-alsa   \
+	qt5-base          \
+	qt5ct             \
+	wget              \
+	xorg-server-xvfb  \
 	zsync
 
 
