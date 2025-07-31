@@ -76,8 +76,12 @@ mkdir -p ./AppDir && (
 
 echo "Debloating package..."
 rm -rfv \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/qml                   \
-	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/geoservices   \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/qml                       \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Qml.so*         \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Quick.so*       \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5Designer.so*    \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/lib/libQt5XmlPatterns.so* \
+	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/geoservices       \
 	./AppDir/lib/python*/site-packages/PyQt*/Qt*/plugins/assetimporters
 
 VERSION="$(xvfb-run -a -- ./AppDir/AppRun --version | awk '{print $NF; exit}')"
