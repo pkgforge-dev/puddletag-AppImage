@@ -29,6 +29,10 @@ mkdir -p ./AppDir && (
 
 	./sharun -g
 
+	# sharun is not stripping python due to issues with other packages
+	# however that issue is not present here lol
+	strip --strip-all ./lib/libpython* 
+
 	# add qt5ct for custom theming
 	echo "Adding qt5ct..."
 	mkdir -p \
