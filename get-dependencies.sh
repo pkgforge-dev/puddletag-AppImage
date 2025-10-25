@@ -2,16 +2,7 @@
 
 set -eux
 
-ARCH="$(uname -m)"
-
-case "$ARCH" in
-	'x86_64')  PKG_TYPE='x86_64.pkg.tar.zst';;
-	'aarch64') PKG_TYPE='aarch64.pkg.tar.xz';;
-	''|*) echo "Unknown arch: $ARCH"; exit 1;;
-esac
-
-LIBXML_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/libxml2-iculess-$PKG_TYPE"
-OPUS_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/opus-nano-$PKG_TYPE"
+EXTRA_PACKAGES="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/get-debloated-pkgs.sh"
 
 echo "Installing build dependencies..."
 echo "---------------------------------------------------------------"
@@ -36,17 +27,11 @@ pacman -Syu --noconfirm \
 	xorg-server-xvfb  \
 	zsync
 
-
-echo "Installing debloated pckages..."
+echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-wget --retry-connrefused --tries=30 "$LIBXML_URL" -O  ./libxml2.pkg.tar.zst
-wget --retry-connrefused --tries=30 "$OPUS_URL"   -O  ./opus.pkg.tar.zst
-
-pacman -U --noconfirm ./*.pkg.tar.zst
-rm -f ./*.pkg.tar.zst
-
-# This app will dlopen mesa, even though it is not needed at all since it is a qt app
-pacman -Rdd --noconfirm mesa
+wget --retry-connrefused --tries=30 "$EXTRA_PACKAGES" -O ./get-debloated-pkgs.sh
+chmod +x ./get-debloated-pkgs.sh
+./get-debloated-pkgs.sh --add-common --prefer-nano
 
 echo "All done!"
 echo "---------------------------------------------------------------"
