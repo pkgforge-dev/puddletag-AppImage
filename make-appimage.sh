@@ -10,6 +10,7 @@ export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}
 export ICON=/usr/share/pixmaps/puddletag.png
 export DESKTOP=/usr/share/applications/puddletag.desktop
 export DEPLOY_SYS_PYTHON=1
+export DEPLOY_OPENGL=1
 
 # Prepare AppDir
 quick-sharun /usr/bin/puddletag
