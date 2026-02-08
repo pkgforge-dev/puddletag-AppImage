@@ -13,7 +13,7 @@
 
 | Latest Stable Release | Upstream URL |
 | :---: | :---: |
-| [Click here](https://github.com/pkgforge-dev/puddletag-AppImage/releases/latest) | [Click here](https://github.com/pkgforge-dev/Anylinux-AppImages) |
+| [Click here](https://github.com/pkgforge-dev/puddletag-AppImage/releases/latest) | [Click here](https://github.com/puddletag/puddletag) |
 
 Made it since the dev doesn't want to create one and is a total asshole. [1](https://github.com/puddletag/puddletag/issues/919#issuecomment-2211231931) [2](https://github.com/puddletag/puddletag/issues/408#issuecomment-2026230760)
 
